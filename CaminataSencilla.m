@@ -11,7 +11,7 @@ HalfStep = step / 2;
 
 xMax = StartPoint(1) + LegLength1 + LegLength2;
 xMin = StartPoint(1) - LegLength1 - LegLength2;
-yMax = StartPoint(2) + LegLength1 + LegLength2;
+yMax = StartPoint(2) + 2;
 yMin = StartPoint(2) - LegLength1 - LegLength2;
 
 AngleMin = -acos((Height)/(LegLength1 + LegLength2));

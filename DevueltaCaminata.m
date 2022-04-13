@@ -4,15 +4,15 @@ clear;
 
 StartPoint = [0,0];
 LegLength1 = 20;
-LegLength2 = 10;
+LegLength2 = 15;
 Height = 25;
-HeightRadius = 8;
+HeightRadius = 50;
 step = 100;
 HalfStep = step/2;
 
 xMax = StartPoint(1) + LegLength1 + LegLength2;
 xMin = StartPoint(1) - LegLength1 - LegLength2;
-yMax = StartPoint(2) + LegLength1 + LegLength2;
+yMax = StartPoint(2) + 2;
 yMin = StartPoint(2) - LegLength1 - LegLength2;
 
 AngleMin = -acos((Height)/(LegLength1 + LegLength2));
@@ -59,13 +59,13 @@ end
 AngleLeg = zeros(HalfStep,1);
 AngleTrian = zeros(HalfStep,1);
 
-for i=1:length(Ycircle)
+for i=2:length(Ycircle)-1
     AngleLeg(i,1) = atand(y(HalfStep + i, 3) / x(HalfStep + i, 3));
     if AngleLeg(i,1) < 0
         AngleLeg(i,1) = AngleLeg(i,1) + 180;
     end
     l3 = sqrt((x(HalfStep + i, 3)-x(1,1))^2+(y(HalfStep +i, 3))^2);
-    AngleTrian(i,1) = acosd((LegLength1^2 + l3^2 - LegLength2^2) / (2 * LegLength1 *l3));
+    AngleTrian(i,1) = acosd((-LegLength1^2 - l3^2 + LegLength2^2) / (-2 * LegLength1 *l3));
     AngleFinal = AngleLeg(i,1) + AngleTrian(i,1);
     x(HalfStep + i, 2) = LegLength1 * cosd(AngleFinal);
     y(HalfStep + i, 2) = LegLength1 * sind(AngleFinal);
@@ -87,18 +87,20 @@ XcentroLegs = SumCentroidesLegs(XCentroLeg1, XCentroLeg2,LegLength1, LegLength2)
 YcentroLegs = SumCentroidesLegs(YCentroLeg1, YCentroLeg2,LegLength1, LegLength2);
 
 x(step, :) = [];
-x(HalfStep, :) = [];
+x(HalfStep + 1, :) = [];
 y(step, :) = [];
-y(HalfStep, :) = [];
+y(HalfStep + 1, :) = [];
 
 
 try
     while 1
         for i=1:step -2
             title("algo");
-            grid;
+            %plot(x(i,:),y(i,:));
+            %plot(x(i,:),y(i,:),Xcircle,Ycircle, XCentroLeg1(i,1), YCentroLeg1(i,1));
             plot(x(i,1:3),y(i,1:3),Xcircle,Ycircle, XCentroLeg1(i,1), YCentroLeg1(i,1) , 'k*', XCentroLeg2(i,1), YCentroLeg2(i, 1), 'k*', XcentroLegs(i,1), YcentroLegs(i,1),'R*');
             %plot(XCentroLeg1(i,1), YCentroLeg1(i,1), XCentroLeg2(i,1), YCentroLeg2(i, 1), 'k*');
+            grid;
             axis([xMin,xMax,yMin,yMax]);
             pause(0.1);
         end
