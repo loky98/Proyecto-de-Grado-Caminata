@@ -8,9 +8,9 @@ LegLength2 = 15;
 Height = 25;
 HeightStep = 50;
 Width = 30;
-Length = 40;
-StepFront = 61;
-StepBack =21;
+Length = 50;
+StepFront = 41;
+StepBack =41;
 step = StepFront + StepBack;
 
 bodyX = Length / 2;
@@ -82,9 +82,7 @@ X2centroLegs = SumCentroidesLegs(X2CentroLeg1, X2CentroLeg2,LegLength1, LegLengt
 Z1centroLegs = SumCentroidesLegs(Z1CentroLeg1, Z1CentroLeg2,LegLength1, LegLength2);
 Z2centroLegs = SumCentroidesLegs(Z2CentroLeg1, Z2CentroLeg2,LegLength1, LegLength2);
 
-o=21;
-u=41;
-a=61;
+o=41;
 
 try
     while 1
@@ -95,23 +93,17 @@ try
                 %XcentroLegs(i,1), ZcentroLegs(i,1),'R*');
             %plot(XCentroLeg1(i,1), ZCentroLeg1(i,1), XCentroLeg2(i,1), ZCentroLeg2(i, 1), 'k*');
             plot3(BaseX, BaseY, BaseZ, x1(i,:), y1(1,:), z1(i,:), ...
-                x2(a,:), y2(1,:), z2(a,:), x3(o,:), y3(1,:), z3(o,:), x4(u,:), y4(1,:), z4(u,:));
+                x2(o,:), y2(1,:), z2(o,:), x3(i,:), y3(1,:), z3(i,:), x4(o,:), y4(1,:), z4(o,:));
             grid;
             %axis([xMin,xMax,yMax,yMin,zMin,zMax]);
             zlim([zMin yMax])
             xlim([xMin xMax])
             ylim([yMin yMax])
             o=o+1;
-            u=u+1;
-            a=a+1;
             if o==81
                 o=1;
-            elseif u==81
-                u=1;
-            elseif a==81
-                a=1;
             end
-                pause(0.01);
+            pause(0.01);
         end
     end
 catch exception
