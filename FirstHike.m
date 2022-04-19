@@ -4,14 +4,18 @@ clear;
 
 StartPoint = [0,0];
 LegLength1 = 20;
+WeightLeg1 = 2;
 LegLength2 = 15;
+WeightLeg2 = 1.5;
 Height = 25;
 HeightStep = 50;
 Width = 30;
-Length = 40;
+Length = 50;
+WeightBase = 10;
 StepFront = 61;
 StepBack =21;
 step = StepFront + StepBack;
+WeightLegs = WeightLeg1 + WeightLeg2;
 
 bodyX = Length / 2;
 bodyY = Width / 2;
@@ -25,8 +29,8 @@ xMax = bodyX + LegLength1;
 xMin = -bodyX - LegLength1;
 yMax = bodyX + LegLength1;
 yMin = -bodyX - LegLength1;
-zMax = Height;
-zMin = -5;
+zMax = Height + 10;
+zMin = -10;
 
 RangeX = RangeStep (Height,LegLength1, LegLength2, StepFront);
 
@@ -76,11 +80,40 @@ X2CentroLeg2 = Centroides(x2, 2, 3);
 Z1CentroLeg2 = Centroides(z1, 2, 3);
 Z2CentroLeg2 = Centroides(z2, 2, 3);
 
-X1centroLegs = SumCentroidesLegs(X1CentroLeg1, X1CentroLeg2,LegLength1, LegLength2);
-X2centroLegs = SumCentroidesLegs(X2CentroLeg1, X2CentroLeg2,LegLength1, LegLength2);
+X1centroLegs = SumCentroidesLegs(X1CentroLeg1, X1CentroLeg2,WeightLeg1, WeightLeg2);
+X2centroLegs = SumCentroidesLegs(X2CentroLeg1, X2CentroLeg2,WeightLeg1, WeightLeg2);
 
-Z1centroLegs = SumCentroidesLegs(Z1CentroLeg1, Z1CentroLeg2,LegLength1, LegLength2);
-Z2centroLegs = SumCentroidesLegs(Z2CentroLeg1, Z2CentroLeg2,LegLength1, LegLength2);
+Z1centroLegs = SumCentroidesLegs(Z1CentroLeg1, Z1CentroLeg2,WeightLeg1, WeightLeg2);
+Z2centroLegs = SumCentroidesLegs(Z2CentroLeg1, Z2CentroLeg2,WeightLeg1, WeightLeg2);
+
+o=21;
+u=41;
+a=61;
+
+centroWeightX = zeros(length(X1centroLegs), 1);
+centroWeighty = zeros(length(X1centroLegs), 1);
+centroWeightz = zeros(length(X1centroLegs), 1);
+
+for i=1:step -2
+    centroWeightX(i,1) = SumCentroidesWeight(WeightBase,0,WeightLegs,X1centroLegs(i),X2centroLegs(a),X2centroLegs(o),X1centroLegs(u));
+    centroWeighty(i,1) = SumCentroidesWeight(WeightBase,0,WeightLegs,y1(1,1),y2(1,1),y3(1,1),y4(1,1));
+    centroWeightz(i,1) = SumCentroidesWeight(WeightBase,Height,WeightLegs,Z1centroLegs(i),Z2centroLegs(a),Z2centroLegs(o),Z1centroLegs(u));
+    o=o+1;
+    u=u+1;
+    a=a+1;
+    if o==81
+        o=1;
+    elseif u==81
+        u=1;
+    elseif a==81
+        a=1;
+    end
+end
+
+subplot(1,2,2);
+plot3(centroWeightX,centroWeighty,centroWeightz);
+grid;
+title('Centro de masa');
 
 o=21;
 u=41;
@@ -94,11 +127,20 @@ try
             %plot(x(i,1:3),z(i,1:3),Xcircle,Zcircle, XCentroLeg1(i,1), ZCentroLeg1(i,1) , 'k*', XCentroLeg2(i,1), ZCentroLeg2(i, 1), 'k*', ...
                 %XcentroLegs(i,1), ZcentroLegs(i,1),'R*');
             %plot(XCentroLeg1(i,1), ZCentroLeg1(i,1), XCentroLeg2(i,1), ZCentroLeg2(i, 1), 'k*');
+            subplot(1,2,1);
             plot3(BaseX, BaseY, BaseZ, x1(i,:), y1(1,:), z1(i,:), ...
-                x2(a,:), y2(1,:), z2(a,:), x3(o,:), y3(1,:), z3(o,:), x4(u,:), y4(1,:), z4(u,:));
+                x2(a,:), y2(1,:), z2(a,:), x3(o,:), y3(1,:), z3(o,:), x4(u,:), y4(1,:), z4(u,:), ...
+                X1CentroLeg1(i),y1(1,1),Z1CentroLeg1(i),'ko',X1CentroLeg2(i),y1(1,1),Z1CentroLeg2(i),'ko', ...
+                X2CentroLeg1(a),y2(1,1),Z2CentroLeg1(a),'ko',X2CentroLeg2(a),y2(1,1),Z2CentroLeg2(a),'ko', ...
+                X2CentroLeg1(o),y3(1,1),Z2CentroLeg1(o),'ko',X2CentroLeg2(o),y3(1,1),Z2CentroLeg2(o),'ko', ...
+                X1CentroLeg1(u),y4(1,1),Z1CentroLeg1(u),'ko',X1CentroLeg2(u),y4(1,1),Z1CentroLeg2(u),'ko', ...
+                X1centroLegs(i),y1(1,1),Z1centroLegs(i),'Ro', ...
+                X2centroLegs(a),y2(1,1),Z2centroLegs(a),'Ro', ...
+                X2centroLegs(o),y3(1,1),Z2centroLegs(o),'Ro', ...
+                X1centroLegs(u),y4(1,1),Z1centroLegs(u),'Ro');
             grid;
             %axis([xMin,xMax,yMax,yMin,zMin,zMax]);
-            zlim([zMin yMax])
+            zlim([zMin zMax])
             xlim([xMin xMax])
             ylim([yMin yMax])
             o=o+1;
@@ -111,7 +153,7 @@ try
             elseif a==81
                 a=1;
             end
-                pause(0.01);
+            pause(0.1);
         end
     end
 catch exception
@@ -124,20 +166,17 @@ function [centroideLeg] = Centroides(vector, p1, p2)
     end
 end
 
-function [CentroideLegs] = SumCentroidesLegs(vector1, vector2, lengthLeg1, lengthLeg2)
+function [CentroideLegs] = SumCentroidesLegs(vector1, vector2, WeightLeg1, WeightLeg2)
     CentroideLegs = zeros(length(vector1), 1);
-    lengthTotal = lengthLeg1 + lengthLeg2;
+    WeightTotal = WeightLeg1 + WeightLeg2;
     for i=1:length(vector1)
-        CentroideLegs(i,1) = (lengthLeg1 * vector1(i,1) + lengthLeg2 * vector2(i,1)) / lengthTotal;
+        CentroideLegs(i,1) = (WeightLeg1 * vector1(i,1) + WeightLeg2 * vector2(i,1)) / WeightTotal;
     end
 end
 
-function [CentroiMassLegs] = SumCentroidesMassLegs(vector1, vector2, MassLeg1, MassLeg2)
-    CentroideLegs = zeros(length(vector1), 1);
-    MassTotal = MassLeg1 + MassLeg2;
-    for i=1:length(vector1)
-        CentroideLegs(i,1) = (MassLeg1 * vector1(i,1) + MassLeg2 * vector2(i,1)) / MassTotal;
-    end
+function [CentroiMassLegs] = SumCentroidesWeight(WeightB,pB,WeightLegs,p1,p2,p3,p4)
+    WeightTotal = WeightB + (4 * WeightLegs);
+    CentroiMassLegs = ((WeightB * pB)+(WeightLegs * p1)+(WeightLegs * p2)+(WeightLegs * p3)+(WeightLegs * p4))/(WeightTotal);
 end
 
 function [RangeStep] = RangeStep (Height,LegLength1, LegLength2, StepFront)
