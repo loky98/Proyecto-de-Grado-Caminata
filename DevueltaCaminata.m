@@ -1,19 +1,19 @@
- clc;
+clc;
 close all;
 clear;
 
 StartPoint = [0,0];
 LegLength1 = 20;
 LegLength2 = 15;
-Height = 25;
-HeightRadius = 50;
+Height = 30;
+HeightRadius = 40;
 step = 100;
 HalfStep = step/2;
 
 xMax = StartPoint(1) + LegLength1 + LegLength2;
 xMin = StartPoint(1) - LegLength1 - LegLength2;
 yMax = StartPoint(2) + 2;
-yMin = StartPoint(2) - LegLength1 - LegLength2;
+yMin = StartPoint(2) - LegLength1 - LegLength2- LegLength1 - LegLength2 - 2;
 
 AngleMin = -acos((Height)/(LegLength1 + LegLength2));
 
@@ -97,8 +97,8 @@ try
         for i=1:step -2
             title("algo");
             %plot(x(i,:),y(i,:));
-            %plot(x(i,:),y(i,:),Xcircle,Ycircle, XCentroLeg1(i,1), YCentroLeg1(i,1));
-            plot(x(i,1:3),y(i,1:3),Xcircle,Ycircle, XCentroLeg1(i,1), YCentroLeg1(i,1) , 'k*', XCentroLeg2(i,1), YCentroLeg2(i, 1), 'k*', XcentroLegs(i,1), YcentroLegs(i,1),'R*');
+            plot(x(i,:),y(i,:),Xcircle,Ycircle, XCentroLeg1(i,1), YCentroLeg1(i,1));
+            %plot(x(i,1:3),y(i,1:3),Xcircle,Ycircle, XCentroLeg1(i,1), YCentroLeg1(i,1) , 'k*', XCentroLeg2(i,1), YCentroLeg2(i, 1), 'k*', XcentroLegs(i,1), YcentroLegs(i,1),'R*');
             %plot(XCentroLeg1(i,1), YCentroLeg1(i,1), XCentroLeg2(i,1), YCentroLeg2(i, 1), 'k*');
             grid;
             axis([xMin,xMax,yMin,yMax]);
